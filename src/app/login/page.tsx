@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   TextInput,
@@ -14,42 +14,41 @@ import {
   Box,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const { login, isLoggedIn } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push('/');
+    }
+  }, [isLoggedIn, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await fetch('/api/v1/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      // 擬似ログイン
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      login();
+
+      notifications.show({
+        title: '成功',
+        message: 'ログインしました',
+        color: 'green',
       });
 
-      if (res.ok) {
-        notifications.show({
-          title: 'ログイン成功',
-          message: 'マイページへ移動します',
-          color: 'green',
-        });
-        router.push('/mypage');
-      } else {
-        notifications.show({
-          title: 'ログイン失敗',
-          message: 'メールアドレスまたはパスワードが間違っています',
-          color: 'red',
-        });
-      }
+      router.push('/');
     } catch (error) {
       notifications.show({
         title: 'エラー',
-        message: '通信エラーが発生しました',
+        message: 'ログインできませんでした',
         color: 'red',
       });
       console.error('Login error:', error);
@@ -67,14 +66,7 @@ export default function LoginPage() {
         height: '100vh',
       }}
     >
-      <Paper
-        radius="md"
-        p="xl"
-        withBorder
-        maw={400}
-        w="100%"
-        shadow="sm"
-      >
+      <Paper radius="md" p="xl" withBorder maw={400} w="100%" shadow="sm">
         <Title order={2} ta="center" mb="lg">
           ログイン
         </Title>
