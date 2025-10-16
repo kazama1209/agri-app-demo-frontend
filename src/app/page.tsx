@@ -25,7 +25,7 @@ import {
   Cell,
 } from 'recharts';
 
-export default function DashboardPage() {
+export default function HomePage() {
   const dataLine = [
     { name: '1月', users: 400 },
     { name: '2月', users: 600 },
