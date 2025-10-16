@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Box, NavLink, Stack, Title, Divider, Button } from '@mantine/core';
+import { Box, NavLink, Stack, Title, Divider, Button, UnstyledButton } from '@mantine/core';
 import { IconHome, IconSettings, IconLogout } from '@tabler/icons-react';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -36,9 +37,21 @@ export function Sidebar() {
       }}
     >
       <Box>
-        <Title order={4} mb="sm">
-          AgriApp Demo
-        </Title>
+        <UnstyledButton
+          component={Link}
+          href="/"
+          style={{
+            display: 'block',
+            textDecoration: 'none',
+            color: 'inherit',
+            cursor: 'pointer',
+          }}
+        >
+          <Title order={4} mb="sm">
+            AgriApp Demo
+          </Title>
+        </UnstyledButton>
+
         <Divider mb="md" color="gray.3" />
 
         <Stack gap="xs">
