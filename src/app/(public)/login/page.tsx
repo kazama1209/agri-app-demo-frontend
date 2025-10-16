@@ -32,26 +32,20 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      // 擬似ログイン
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      await new Promise((resolve) => setTimeout(resolve, 400));
       login();
-
       notifications.show({
-        title: '成功',
-        message: 'ログインしました',
+        title: 'ログイン成功',
+        message: 'ダッシュボードに移動します',
         color: 'green',
       });
-
-      router.push('/');
-    } catch (error) {
+    } catch {
       notifications.show({
         title: 'エラー',
-        message: 'ログインできませんでした',
+        message: 'ログインに失敗しました',
         color: 'red',
       });
-      console.error('Login error:', error);
     } finally {
       setLoading(false);
     }

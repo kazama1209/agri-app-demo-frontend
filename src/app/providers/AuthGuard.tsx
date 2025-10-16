@@ -1,24 +1,19 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Center, Loader } from '@mantine/core';
 import { useAuth } from '@/hooks/useAuth';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname();
   const { isLoggedIn, initialized } = useAuth();
 
-  const publicRoutes = ['/login', '/signup'];
-
-  const isPublicRoute = publicRoutes.some((path) => pathname.startsWith(path));
-
   useEffect(() => {
-    if (initialized && !isLoggedIn && !isPublicRoute) {
-      router.push('/login');
+    if (initialized && !isLoggedIn) {
+      router.replace('/login');
     }
-  }, [initialized, isLoggedIn, isPublicRoute, router]);
+  }, [initialized, isLoggedIn, router]);
 
   if (!initialized) {
     return (
@@ -28,7 +23,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!isLoggedIn && !isPublicRoute) return null;
+  if (!isLoggedIn) return null;
 
   return <>{children}</>;
 }
