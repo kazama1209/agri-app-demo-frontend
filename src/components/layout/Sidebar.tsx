@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Box, NavLink, Stack, Title, Divider, Button, Space } from '@mantine/core';
+import { Box, NavLink, Stack, Title, Divider, Button } from '@mantine/core';
 import { IconHome, IconSettings, IconLogout } from '@tabler/icons-react';
 import { useAuth } from '@/hooks/useAuth';
 
