@@ -75,7 +75,7 @@ export default function LoginPage() {
           <Stack>
             <TextInput
               label="メールアドレス"
-              placeholder="you@example.com"
+              placeholder="user@example.com"
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
               required
