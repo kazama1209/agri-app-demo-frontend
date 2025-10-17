@@ -21,6 +21,9 @@ import {
   BarChart,
   Bar,
   Legend,
+  PieChart,
+  Pie,
+  Cell,
 } from 'recharts';
 
 export default function HomePage() {
@@ -34,6 +37,16 @@ export default function HomePage() {
     { day: '6日', temperture: 23.9, humidity: 66, light: 430, rootTemperture: 22.2, ph: 6.6, ec: 1.8, o2: 7.4 },
     { day: '7日', temperture: 23.4, humidity: 68, light: 400, rootTemperture: 21.9, ph: 6.5, ec: 1.7, o2: 7.0 },
   ];
+
+  // 養液組成比（円グラフ）
+  const nutrientData = [
+    { name: '窒素 (N)', value: 35 },
+    { name: 'リン酸 (P)', value: 25 },
+    { name: 'カリウム (K)', value: 30 },
+    { name: '微量要素', value: 10 },
+  ];
+
+  const COLORS = ['#51cf66', '#74c0fc', '#ffd43b', '#ff922b'];
 
   return (
     <main style={{ padding: 24 }}>
@@ -118,20 +131,8 @@ export default function HomePage() {
                 <YAxis yAxisId="right" orientation="right" />
                 <Tooltip />
                 <Legend />
-                <Line
-                  yAxisId="left"
-                  type="monotone"
-                  dataKey="temperture"
-                  stroke="#fa5252"
-                  name="温度 (℃)"
-                />
-                <Line
-                  yAxisId="right"
-                  type="monotone"
-                  dataKey="humidity"
-                  stroke="#339af0"
-                  name="湿度 (%)"
-                />
+                <Line yAxisId="left" type="monotone" dataKey="temperture" stroke="#fa5252" name="温度 (℃)" />
+                <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#339af0" name="湿度 (%)" />
               </LineChart>
             </ResponsiveContainer>
           </Card>
@@ -157,34 +158,67 @@ export default function HomePage() {
           </Card>
         </Grid.Col>
 
+        {/* 養液組成比（円グラフ） */}
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Card
+            withBorder
+            shadow="sm"
+            radius="md"
+            p="md"
+            style={{ height: 350, display: 'flex', flexDirection: 'column' }}
+          >
+            <Title order={4} mb="xs">
+              養液組成比
+            </Title>
+            <div style={{ flex: 1 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={nutrientData}
+                    dataKey="value"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label
+                  >
+                    {nutrientData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        </Grid.Col>
+
         {/* pH・EC・酸素濃度 */}
-        <Grid.Col span={{ base: 12, md: 12 }}>
-          <Card withBorder shadow="sm" radius="md" p="md">
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Card
+            withBorder
+            shadow="sm"
+            radius="md"
+            p="md"
+            style={{ height: 350, display: 'flex', flexDirection: 'column' }}
+          >
             <Title order={4} mb="xs">
               水質関連（pH / EC / 酸素濃度）
             </Title>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="ph" stroke="#40c057" name="pH" />
-                <Line
-                  type="monotone"
-                  dataKey="ec"
-                  stroke="#228be6"
-                  name="EC (mS/cm)"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="o2"
-                  stroke="#15aabf"
-                  name="酸素濃度 (mg/L)"
-                />
-              </LineChart>
-            </ResponsiveContainer>
+            <div style={{ flex: 1 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="ph" stroke="#40c057" name="pH" />
+                  <Line type="monotone" dataKey="ec" stroke="#228be6" name="EC (mS/cm)" />
+                  <Line type="monotone" dataKey="o2" stroke="#15aabf" name="酸素濃度 (mg/L)" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </Card>
         </Grid.Col>
       </Grid>
